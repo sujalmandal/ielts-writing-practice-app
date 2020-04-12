@@ -14,4 +14,6 @@ public final class Constants {
 	public static final String WORDS_IN_A_SENTENCE = "https://wordsinasentence.com/erroneous-in-a-sentence/";
 	public static final int DEFAULT_LIST_VIEW_WIDTH = 900;
 	public static final int DEFAULT_LIST_VIEW_HEIGHT = 500;
+	public static final String GT1_IMAGE="image/gt1.jpg";
+	public static final String GT2_IMAGE="image/gt2.jpg";
 }

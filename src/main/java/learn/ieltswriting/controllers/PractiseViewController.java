@@ -8,8 +8,6 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -25,6 +23,7 @@ import javafx.util.Duration;
 import learn.ieltswriting.App;
 import learn.ieltswriting.Controller;
 import learn.ieltswriting.FileLogger;
+import learn.ieltswriting.constants.Constants;
 import learn.ieltswriting.util.WordsUtils;
 
 public class PractiseViewController implements Controller, Initializable {
@@ -41,15 +40,16 @@ public class PractiseViewController implements Controller, Initializable {
 	private Text wordCountText;
 
 	@FXML
-	private Text textQuestion;
+	private TextArea textQuestion;
 
 	@FXML
 	private ImageView qTypeImgView;
-	
+
 	@FXML
 	private VBox root;
 
 	private int elapsedTime = 0;
+
 	private int totalTime = 0;
 
 	private Timeline timeline;
@@ -57,30 +57,23 @@ public class PractiseViewController implements Controller, Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		log.info("initialising practise view");
-		textAreaAnswer.setOnKeyPressed(event -> {
-			wordCountText.setText("word count : " + WordsUtils.totalWords(textAreaAnswer.getText().trim()));
-		});
-		timeline = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				if((totalTime-elapsedTime)>0) {
-					elapsedTime += 1;
-					timeText.setText((totalTime - elapsedTime) + " minutes left");
-				}
-				else {
-					textAreaAnswer.setEditable(false);
-					PractiseViewController.this.timeline.stop();
-					Platform.runLater(()->{
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Test ended.");
-						alert.setContentText("Your exam has ended!");
-						alert.showAndWait();
-					});
-				}
+		textAreaAnswer.setOnKeyPressed(event -> wordCountText
+				.setText("word count : " + WordsUtils.totalWords(textAreaAnswer.getText().trim())));
+		timeline = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
+			if ((totalTime - elapsedTime) > 0) {
+				elapsedTime += 1;
+				timeText.setText((totalTime - elapsedTime) + " minutes left");
+			} else {
+				textAreaAnswer.setEditable(false);
+				PractiseViewController.this.timeline.stop();
+				Platform.runLater(() -> {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Test ended.");
+					alert.setContentText("Your exam has ended!");
+					alert.showAndWait();
+				});
 			}
-		}
-		));
+		}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 	}
@@ -89,17 +82,18 @@ public class PractiseViewController implements Controller, Initializable {
 		textQuestion.setText(question);
 		if (type == 1) {
 			totalTime = 20;
-			qTypeImgView.setImage(new Image(App.class.getResource("image/gt1.jpg").toString(), true));
+			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
 		if (type == 2) {
 			totalTime = 40;
-			qTypeImgView.setImage(new Image(App.class.getResource("image/gt2.jpg").toString(), true));
+			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT2_IMAGE).toString(), true));
 		}
+		timeText.setText((totalTime - elapsedTime) + " minutes left");
 	}
-	
+
 	@FXML
 	public void fullScreenExit(KeyEvent e) {
-		if(e.getCode()==KeyCode.ESCAPE) {
+		if (e.getCode() == KeyCode.ESCAPE) {
 			root.getScene().getWindow().setHeight(720);
 			root.getScene().getWindow().setWidth(1200);
 			root.getScene().getWindow().centerOnScreen();
