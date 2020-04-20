@@ -130,7 +130,7 @@ public class PractiseViewController implements Controller, Initializable {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
 				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection =  new Selection();
+				Selection selection = new Selection();
 				selection.setStart(startIndex);
 				selection.setEnd(endIndex);
 				if (selections.contains(selection)) {
@@ -146,10 +146,11 @@ public class PractiseViewController implements Controller, Initializable {
 				int endIndex = textQuestion.getSelection().getEnd();
 				Selection selection = new Selection();
 				if (!selections.contains(selection)) {
-					selectAdjustedIndex(selection,startIndex,endIndex);
-					String trueSelectedText=textQuestion.getText(new IndexRange(selection.getStart(), selection.getEnd()));
+					selectAdjustedIndex(selection, startIndex, endIndex);
+					String trueSelectedText = textQuestion
+							.getText(new IndexRange(selection.getStart(), selection.getEnd()));
 					selection.setSelectedText(trueSelectedText);
-					System.out.println("selected: |"+trueSelectedText+"|");
+					System.out.println("selected: |" + trueSelectedText + "|");
 					Stage popup = createPopup(selection);
 					popup.setAlwaysOnTop(true);
 					selection.setPopup(popup);
@@ -187,22 +188,17 @@ public class PractiseViewController implements Controller, Initializable {
 	}
 
 	private void selectAdjustedIndex(Selection selection, int startIndex, int endIndex) {
-		System.out.println("startIndex: "+startIndex+" endIndex:"+endIndex);
-		System.out.println(textQuestion.getText().charAt(startIndex));
-		System.out.println(textQuestion.getText().charAt(endIndex));
-		if(textQuestion.getText().charAt(startIndex)==' ') {
+		if (textQuestion.getText().charAt(startIndex) == ' ') {
 			startIndex++;
-		}
-		else {
-			while(textQuestion.getText().charAt(startIndex-1)!=' ') {
+		} else {
+			while (startIndex > 0 && textQuestion.getText().charAt(startIndex - 1) != ' ') {
 				startIndex--;
 			}
 		}
-		if(textQuestion.getText().charAt(endIndex-1)==' ') {
+		if (textQuestion.getText().charAt(endIndex - 1) == ' ') {
 			endIndex--;
-		}
-		else {
-			while(textQuestion.getText().charAt(endIndex)!=' ') {
+		} else {
+			while (endIndex < textQuestion.getText().length() && textQuestion.getText().charAt(endIndex) != ' ') {
 				endIndex++;
 			}
 		}
