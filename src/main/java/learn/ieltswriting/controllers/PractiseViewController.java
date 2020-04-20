@@ -73,6 +73,10 @@ public class PractiseViewController implements Controller, Initializable {
 	private Timeline timeline;
 
 	private Set<Selection> selections = new HashSet<>();
+	MenuItem highlight = new MenuItem("highlight");
+	MenuItem clear = new MenuItem("clear");
+	MenuItem clearAll = new MenuItem("clear all");
+	MenuItem addNotes = new MenuItem("add notes");
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -107,36 +111,32 @@ public class PractiseViewController implements Controller, Initializable {
 		textQuestion.setWrapText(true);
 		textQuestion.setEditable(false);
 		textQuestion.setStyle("-fx-font-size: 16;-fx-font-weight:bold;");
-		MenuItem highlight = new MenuItem("highlight");
-		MenuItem clear = new MenuItem("clear");
-		MenuItem clearAll = new MenuItem("clear all");
-		MenuItem addNotes = new MenuItem("add notes");
 		textQuestion.setContextMenu(new ContextMenu());
 		textQuestion.getContextMenu().getItems().addAll(highlight, addNotes, clear, clearAll);
+
 		highlight.setOnAction(event -> {
-			if (textQuestion.getSelectedText().trim().length() != 0) {
-				int startIndex = textQuestion.getSelection().getStart();
-				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection();
-				selection.setStart(startIndex);
-				selection.setEnd(endIndex);
-				if (!selections.contains(selection)) {
-					selections.add(selection);
-					textQuestion.setStyle(startIndex, endIndex, Constants.HIGHLIGHT_CSS);
-				}
+			int startIndex = textQuestion.getSelection().getStart();
+			int endIndex = textQuestion.getSelection().getEnd();
+			Selection selection = new Selection(startIndex, endIndex);
+			adjustSelection(selection);
+			if (!selections.contains(selection)) {
+				selections.add(selection);
+				textQuestion.setStyle(selection.getStart(), selection.getEnd(), Constants.HIGHLIGHT_CSS);
 			}
 		});
+
 		clear.setOnAction(event -> {
-			if (textQuestion.getSelectedText().trim().length() != 0) {
-				int startIndex = textQuestion.getSelection().getStart();
-				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection();
-				selection.setStart(startIndex);
-				selection.setEnd(endIndex);
-				if (selections.contains(selection)) {
-					selections.remove(selection);
-					textQuestion.setStyle(startIndex, endIndex, Constants.NO_HIGHLIGHT_CSS);
-				}
+			int startIndex = textQuestion.getSelection().getStart();
+			int endIndex = textQuestion.getSelection().getEnd();
+			Selection selection = new Selection(startIndex, endIndex);
+			System.out.println("current selection: " + selection);
+			System.out.println("all selections: " + selections);
+			System.out.println("overlaps: " + overlaps(selections, selection));
+			if (overlaps(selections, selection).isPresent()) {
+				Selection matchedSelection = overlaps(selections, selection).get();
+				selections.remove(matchedSelection);
+				textQuestion.setStyle(matchedSelection.getStart(), matchedSelection.getEnd(),
+						Constants.NO_HIGHLIGHT_CSS);
 			}
 		});
 
@@ -144,9 +144,9 @@ public class PractiseViewController implements Controller, Initializable {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
 				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection();
+				Selection selection = new Selection(startIndex, endIndex);
+				adjustSelection(selection);
 				if (!selections.contains(selection)) {
-					selectAdjustedIndex(selection, startIndex, endIndex);
 					String trueSelectedText = textQuestion
 							.getText(new IndexRange(selection.getStart(), selection.getEnd()));
 					selection.setSelectedText(trueSelectedText);
@@ -164,16 +164,18 @@ public class PractiseViewController implements Controller, Initializable {
 		clearAll.setOnAction(event -> {
 			selections.forEach(selection -> {
 				textQuestion.setStyle(selection.getStart(), selection.getEnd(), Constants.NO_HIGHLIGHT_CSS);
+				addNotes.setDisable(false);
+				highlight.setDisable(false);
 			});
 			selections.clear();
 		});
 
+		// show previously saved popup
 		textQuestion.setOnMouseClicked(mEvent -> {
 			if (mEvent.getButton() == MouseButton.PRIMARY && mEvent.getClickCount() == 2) {
-				Optional<Selection> selection = selections.stream().filter(s -> {
+				Optional<Selection> selection = selections.stream().filter(Selection::isNotes).filter(s -> {
 					boolean found = false;
-					found = s.getSelectedText().contains(textQuestion.getSelectedText())
-							&& textQuestion.getSelection().getStart() >= s.getStart()
+					found = textQuestion.getSelection().getStart() >= s.getStart()
 							&& textQuestion.getSelection().getEnd() <= s.getEnd();
 					return found;
 				}).findFirst();
@@ -185,9 +187,62 @@ public class PractiseViewController implements Controller, Initializable {
 				}
 			}
 		});
+
+		// enable and disable menu items
+		textQuestion.setOnMouseReleased(mEvent -> {
+			System.out.println("setOnMouseReleased");
+			int start = textQuestion.getSelection().getStart();
+			int end = textQuestion.getSelection().getEnd();
+			if (start == end) {
+				addNotes.setDisable(true);
+				highlight.setDisable(true);
+			} else {
+				addNotes.setDisable(false);
+				highlight.setDisable(false);
+			}
+			if (!selections.isEmpty()) {
+				boolean overlaps = overlaps(selections, new Selection(start, end)).isPresent();
+				System.out.println(selections);
+				System.out.println(start + ":" + end);
+				System.out.println(overlaps);
+				if (overlaps) {
+					addNotes.setDisable(true);
+					highlight.setDisable(true);
+				} else {
+					addNotes.setDisable(false);
+					highlight.setDisable(false);
+				}
+			}
+		});
 	}
 
-	private void selectAdjustedIndex(Selection selection, int startIndex, int endIndex) {
+	private Optional<Selection> overlaps(Set<Selection> selections, Selection currentSelection) {
+		return selections.stream().filter(testSelection -> {
+			if (currentSelection.getStart() >= testSelection.getStart()
+					&& currentSelection.getEnd() <= testSelection.getEnd()) {
+				return true;
+			}
+			if (currentSelection.getStart() < testSelection.getStart()
+					&& currentSelection.getEnd() >= testSelection.getStart()
+					&& currentSelection.getEnd() < testSelection.getEnd()) {
+				return true;
+			}
+			if (currentSelection.getStart() >= testSelection.getStart()
+					&& currentSelection.getStart() < testSelection.getEnd()
+					&& currentSelection.getEnd() > testSelection.getEnd()) {
+				return true;
+			}
+			if (currentSelection.getStart() < testSelection.getStart()
+					&& currentSelection.getEnd() > testSelection.getEnd()) {
+				return true;
+			}
+			return false;
+		}).findFirst();
+	}
+
+	private void adjustSelection(Selection selection) {
+		int startIndex = selection.getStart();
+		int endIndex = selection.getEnd();
 		if (textQuestion.getText().charAt(startIndex) == ' ') {
 			startIndex++;
 		} else {

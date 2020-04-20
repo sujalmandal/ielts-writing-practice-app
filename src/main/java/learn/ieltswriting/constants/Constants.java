@@ -18,6 +18,6 @@ public final class Constants {
 	public static final String GT1_IMAGE="image/gt1.jpg";
 	public static final String GT2_IMAGE="image/gt2.jpg";
 	public static final String HIGHLIGHT_CSS="-rtfx-background-color: #FFFF9E";
-	public static final String HIGHLIGHT_CSS_NOTES="-rtfx-background-color: #FFFF5E";
+	public static final String HIGHLIGHT_CSS_NOTES="-rtfx-background-color: #FC943D";
 	public static final String NO_HIGHLIGHT_CSS="-rtfx-background-color: white";
 }
