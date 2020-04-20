@@ -9,22 +9,21 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<HBox fx:id="root" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="learn.ieltswriting.controllers.TaskInputViewController">
+<HBox fx:id="root" prefHeight="378.0" prefWidth="667.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="learn.ieltswriting.controllers.TaskInputViewController">
    <children>
       <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.199951171875" minWidth="0.0" prefWidth="68.00000610351563" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="700.0" minWidth="10.0" prefWidth="650.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="352.0" minWidth="12.600061035156273" prefWidth="63.200024414062455" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="140.00001220703126" minWidth="0.0" prefWidth="94.40003662109376" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="700.0" minWidth="10.0" prefWidth="590.3999267578125" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="352.0" minWidth="12.600061035156273" prefWidth="99.2000732421875" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="128.39999389648438" minHeight="26.000003814697266" prefHeight="61.599996948242186" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="449.99999618530273" minHeight="347.6000061035156" prefHeight="374.4000244140625" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="64.5999755859375" minHeight="30.400030517578102" prefHeight="64.5999755859375" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="128.39999389648438" minHeight="26.000003814697266" prefHeight="102.40001831054687" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="449.99999618530273" minHeight="192.00003662109376" prefHeight="207.9999816894531" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="93.59998779296876" minHeight="30.400030517578102" prefHeight="76.79996337890623" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextArea fx:id="questionTextArea" prefHeight="200.0" prefWidth="269.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextArea fx:id="questionTextArea" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
             <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints hgrow="ALWAYS" />
@@ -38,7 +37,7 @@
                   <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#startTaskTwo" text="TASK 2" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
                </children>
             </GridPane>
-            <Label text="WRITE THE QUESTION BELOW AND CLICK THE BUTTON TO BEGIN PRACTISING." textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <Label text="WRITE THE QUESTION BELOW." textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>

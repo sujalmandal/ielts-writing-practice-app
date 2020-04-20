@@ -36,8 +36,6 @@ public class App extends Application {
 		ThemeUtil.setLightTheme(scene);
 		stage.setTitle(Constants.APP_NAME + " " + Constants.APP_VERSION);
 		stage.setScene(scene);
-		stage.setHeight(Constants.DEFAULT_LIST_VIEW_HEIGHT);
-		stage.setWidth(Constants.DEFAULT_LIST_VIEW_WIDTH);
 		stage.centerOnScreen();
 		stage.show();
 		log.info("main app loaded.");
@@ -50,7 +48,7 @@ public class App extends Application {
 		scene.setRoot(root);
 		return fxmlLoader.getController();
 	}
-
+	
 	public static Controller setRootFullScreen(String fxml) throws IOException {
 		stage.setFullScreen(true);
 		return setRoot(fxml);

@@ -29,7 +29,6 @@ public class TaskInputViewController implements Controller, Initializable {
 		String question = questionTextArea.getText();
 		PractiseViewController ctnlr= (PractiseViewController) App.setRootFullScreen(Constants.PRACTICE_VIEW);
 		ctnlr.setQuestion(question,1);
-		System.out.println(question);
 	}
 	
 	
@@ -37,8 +36,6 @@ public class TaskInputViewController implements Controller, Initializable {
 	public void startTaskTwo() throws IOException {
 		String question = questionTextArea.getText();
 		PractiseViewController ctnlr= (PractiseViewController) App.setRootFullScreen(Constants.PRACTICE_VIEW);
-		System.out.println(ctnlr);
 		ctnlr.setQuestion(question,2);
-		System.out.println(question);
 	}
 }

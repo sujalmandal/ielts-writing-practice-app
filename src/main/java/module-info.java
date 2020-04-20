@@ -11,6 +11,8 @@ module learn.ieltswriting {
 	requires transitive javafx.base;
 	requires java.logging;
 	requires java.base;
+	requires org.controlsfx.controls;
+	requires org.fxmisc.richtext;
 	
 	opens learn.ieltswriting to javafx.fxml;
 	opens learn.ieltswriting.controllers to javafx.fxml;

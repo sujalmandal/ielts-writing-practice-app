@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import org.fxmisc.richtext.InlineCssTextArea?>
 
 <VBox fx:id="root" alignment="CENTER" onKeyReleased="#fullScreenExit" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="learn.ieltswriting.controllers.PractiseViewController">
    <children>
@@ -104,12 +105,9 @@
 										<Text fx:id="wordCountText" strokeType="OUTSIDE" strokeWidth="0.0" text="word count: 0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
 									</children>
 								</GridPane>
-                        <TextArea fx:id="textQuestion" editable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-font-size: 18;" text="Question" wrapText="true" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </TextArea>
-							</children>
+                        <InlineCssTextArea fx:id="textQuestion" prefHeight="200.0" prefWidth="200.0">
+                        </InlineCssTextArea>
+                        </children>
 						</GridPane>
 						<ImageView fx:id="qTypeImgView" fitHeight="101.0" fitWidth="1086.0" pickOnBounds="true" preserveRatio="true">
 							<image>
