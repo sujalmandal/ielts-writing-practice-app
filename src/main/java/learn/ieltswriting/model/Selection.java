@@ -1,12 +1,12 @@
 package learn.ieltswriting.model;
 
-import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 public class Selection {
 
 	int start;
 	int end;
-	Popup popup;
+	Stage popup;
 	String selectedText;
 	String notes;
 	
@@ -27,10 +27,11 @@ public class Selection {
 	public void setEnd(int end) {
 		this.end = end;
 	}
-	public Popup getPopup() {
+	public Stage getPopup() {
+		popup.setResizable(false);
 		return popup;
 	}
-	public void setPopup(Popup popup) {
+	public void setPopup(Stage popup) {
 		this.popup = popup;
 	}
 	public String getSelectedText() {

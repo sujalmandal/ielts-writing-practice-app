@@ -20,7 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
@@ -33,7 +33,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import learn.ieltswriting.App;
 import learn.ieltswriting.Controller;
@@ -93,7 +94,7 @@ public class PractiseViewController implements Controller, Initializable {
 				});
 			}
 		}));
-		textAreaAnswer.setOnMouseClicked(mEvent->{
+		textAreaAnswer.setOnMouseClicked(mEvent -> {
 			textAreaAnswer.requestFocus();
 		});
 		timeline.setCycleCount(Animation.INDEFINITE);
@@ -110,7 +111,7 @@ public class PractiseViewController implements Controller, Initializable {
 		MenuItem clearAll = new MenuItem("clear all");
 		MenuItem addNotes = new MenuItem("add notes");
 		textQuestion.setContextMenu(new ContextMenu());
-		textQuestion.getContextMenu().getItems().addAll(highlight, clear, clearAll);
+		textQuestion.getContextMenu().getItems().addAll(highlight, addNotes, clear, clearAll);
 		highlight.setOnAction(event -> {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
@@ -143,10 +144,11 @@ public class PractiseViewController implements Controller, Initializable {
 				if (!selections.contains(selection)) {
 					textQuestion.setStyle(startIndex, endIndex, Constants.HIGHLIGHT_CSS_NOTES);
 					Point p = MouseInfo.getPointerInfo().getLocation();
-					Popup popup = createNote(selection);
-					popup.show(textQuestion, p.x, p.y);
+					Stage popup = createPopup(selection);
+					popup.setAlwaysOnTop(true);
 					selection.setPopup(popup);
 					selections.add(selection);
+					popup.show();
 				}
 			}
 		});
@@ -160,11 +162,18 @@ public class PractiseViewController implements Controller, Initializable {
 
 		textQuestion.setOnMouseClicked(mEvent -> {
 			if (mEvent.getButton() == MouseButton.PRIMARY && mEvent.getClickCount() == 2) {
-				Optional<Selection> selection = selections.stream()
-						.filter(s -> s.getSelectedText().equals(textQuestion.getSelectedText())).findFirst();
+				Optional<Selection> selection = selections.stream().filter(s -> {
+					boolean found = false;
+					found = s.getSelectedText().equals(textQuestion.getSelectedText())
+							&& s.getStart() == textQuestion.getSelection().getStart()
+							&& s.getEnd() == textQuestion.getSelection().getEnd();
+					return found;
+				}).findFirst();
 				if (selection.isPresent()) {
 					Point p = MouseInfo.getPointerInfo().getLocation();
-					selection.get().getPopup().show(textQuestion, p.x, p.y);
+					selection.get().getPopup().setAlwaysOnTop(true);
+					Stage popup = selection.get().getPopup();
+					popup.show();
 				}
 			}
 		});
@@ -192,14 +201,19 @@ public class PractiseViewController implements Controller, Initializable {
 		}
 	}
 
-	private Popup createNote(Selection selection) {
-		Popup popup = new Popup();
-		popup.setAutoFix(true);
+	private Stage createPopup(Selection selection) {
+		Stage popup = new Stage();
 		FXMLLoader loader = new FXMLLoader(App.class.getResource(Constants.POPUP_VIEW + Constants.FXML));
 		try {
-			popup.getContent().add((Parent) loader.load());
+			Scene content = new Scene(loader.load());
 			StickyNoteController controller = loader.getController();
-			controller.init(selection, popup);
+			popup.initStyle(StageStyle.UTILITY);
+			controller.init(selection);
+			popup.setScene(content);
+			popup.setResizable(false);
+			popup.setOnCloseRequest(e -> {
+				popup.hide();
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
