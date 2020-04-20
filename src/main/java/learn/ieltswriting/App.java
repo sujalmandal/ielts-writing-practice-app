@@ -49,8 +49,8 @@ public class App extends Application {
 		return fxmlLoader.getController();
 	}
 	
-	public static Controller setRootFullScreen(String fxml) throws IOException {
-		stage.setFullScreen(true);
+	public static Controller setRoomMaximized(String fxml) throws IOException {
+		stage.setMaximized(true);
 		return setRoot(fxml);
 	}
 

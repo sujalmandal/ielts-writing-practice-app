@@ -24,6 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -116,7 +117,9 @@ public class PractiseViewController implements Controller, Initializable {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
 				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection(startIndex, endIndex);
+				Selection selection = new Selection();
+				selection.setStart(startIndex);
+				selection.setEnd(endIndex);
 				if (!selections.contains(selection)) {
 					selections.add(selection);
 					textQuestion.setStyle(startIndex, endIndex, Constants.HIGHLIGHT_CSS);
@@ -127,7 +130,9 @@ public class PractiseViewController implements Controller, Initializable {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
 				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection(startIndex, endIndex);
+				Selection selection =  new Selection();
+				selection.setStart(startIndex);
+				selection.setEnd(endIndex);
 				if (selections.contains(selection)) {
 					selections.remove(selection);
 					textQuestion.setStyle(startIndex, endIndex, Constants.NO_HIGHLIGHT_CSS);
@@ -139,15 +144,17 @@ public class PractiseViewController implements Controller, Initializable {
 			if (textQuestion.getSelectedText().trim().length() != 0) {
 				int startIndex = textQuestion.getSelection().getStart();
 				int endIndex = textQuestion.getSelection().getEnd();
-				Selection selection = new Selection(startIndex, endIndex);
-				selection.setSelectedText(textQuestion.getSelectedText());
+				Selection selection = new Selection();
 				if (!selections.contains(selection)) {
-					textQuestion.setStyle(startIndex, endIndex, Constants.HIGHLIGHT_CSS_NOTES);
-					Point p = MouseInfo.getPointerInfo().getLocation();
+					selectAdjustedIndex(selection,startIndex,endIndex);
+					String trueSelectedText=textQuestion.getText(new IndexRange(selection.getStart(), selection.getEnd()));
+					selection.setSelectedText(trueSelectedText);
+					System.out.println("selected: |"+trueSelectedText+"|");
 					Stage popup = createPopup(selection);
 					popup.setAlwaysOnTop(true);
 					selection.setPopup(popup);
 					selections.add(selection);
+					textQuestion.setStyle(selection.getStart(), selection.getEnd(), Constants.HIGHLIGHT_CSS_NOTES);
 					popup.show();
 				}
 			}
@@ -164,9 +171,9 @@ public class PractiseViewController implements Controller, Initializable {
 			if (mEvent.getButton() == MouseButton.PRIMARY && mEvent.getClickCount() == 2) {
 				Optional<Selection> selection = selections.stream().filter(s -> {
 					boolean found = false;
-					found = s.getSelectedText().equals(textQuestion.getSelectedText())
-							&& s.getStart() == textQuestion.getSelection().getStart()
-							&& s.getEnd() == textQuestion.getSelection().getEnd();
+					found = s.getSelectedText().contains(textQuestion.getSelectedText())
+							&& textQuestion.getSelection().getStart() >= s.getStart()
+							&& textQuestion.getSelection().getEnd() <= s.getEnd();
 					return found;
 				}).findFirst();
 				if (selection.isPresent()) {
@@ -177,6 +184,30 @@ public class PractiseViewController implements Controller, Initializable {
 				}
 			}
 		});
+	}
+
+	private void selectAdjustedIndex(Selection selection, int startIndex, int endIndex) {
+		System.out.println("startIndex: "+startIndex+" endIndex:"+endIndex);
+		System.out.println(textQuestion.getText().charAt(startIndex));
+		System.out.println(textQuestion.getText().charAt(endIndex));
+		if(textQuestion.getText().charAt(startIndex)==' ') {
+			startIndex++;
+		}
+		else {
+			while(textQuestion.getText().charAt(startIndex-1)!=' ') {
+				startIndex--;
+			}
+		}
+		if(textQuestion.getText().charAt(endIndex-1)==' ') {
+			endIndex--;
+		}
+		else {
+			while(textQuestion.getText().charAt(endIndex)!=' ') {
+				endIndex++;
+			}
+		}
+		selection.setStart(startIndex);
+		selection.setEnd(endIndex);
 	}
 
 	public void setQuestion(String question, int type) {

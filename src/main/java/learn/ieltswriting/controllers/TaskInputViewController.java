@@ -27,7 +27,7 @@ public class TaskInputViewController implements Controller, Initializable {
 	@FXML
 	public void startTaskOne() throws IOException {
 		String question = questionTextArea.getText();
-		PractiseViewController ctnlr= (PractiseViewController) App.setRootFullScreen(Constants.PRACTICE_VIEW);
+		PractiseViewController ctnlr= (PractiseViewController) App.setRoomMaximized(Constants.PRACTICE_VIEW);
 		ctnlr.setQuestion(question,1);
 	}
 	
@@ -35,7 +35,7 @@ public class TaskInputViewController implements Controller, Initializable {
 	@FXML
 	public void startTaskTwo() throws IOException {
 		String question = questionTextArea.getText();
-		PractiseViewController ctnlr= (PractiseViewController) App.setRootFullScreen(Constants.PRACTICE_VIEW);
+		PractiseViewController ctnlr= (PractiseViewController) App.setRoomMaximized(Constants.PRACTICE_VIEW);
 		ctnlr.setQuestion(question,2);
 	}
 }

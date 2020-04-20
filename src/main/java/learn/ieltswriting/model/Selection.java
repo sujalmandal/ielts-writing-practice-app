@@ -10,11 +10,6 @@ public class Selection {
 	String selectedText;
 	String notes;
 	
-	public Selection(int start, int end) {
-		super();
-		this.start = start;
-		this.end = end;
-	}
 	public int getStart() {
 		return start;
 	}
