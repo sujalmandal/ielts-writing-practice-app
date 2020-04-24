@@ -17,7 +17,9 @@ public class TaskInputViewController implements Controller, Initializable {
 
 	private static final Logger log = FileLogger.getLogger(TaskInputViewController.class.getName());
 	@FXML
-	private TextArea questionTextArea;
+	private TextArea questionTextAreaT1;
+	@FXML
+	private TextArea questionTextAreaT2;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -26,16 +28,20 @@ public class TaskInputViewController implements Controller, Initializable {
 	
 	@FXML
 	public void startTaskOne() throws IOException {
-		String question = questionTextArea.getText();
 		PractiseViewController ctnlr= (PractiseViewController) App.setRoomMaximized(Constants.PRACTICE_VIEW);
-		ctnlr.setQuestion(question,1);
+		ctnlr.setQuestion(questionTextAreaT1.getText(),questionTextAreaT2.getText(),1);
 	}
 	
 	
 	@FXML
 	public void startTaskTwo() throws IOException {
-		String question = questionTextArea.getText();
 		PractiseViewController ctnlr= (PractiseViewController) App.setRoomMaximized(Constants.PRACTICE_VIEW);
-		ctnlr.setQuestion(question,2);
+		ctnlr.setQuestion(questionTextAreaT1.getText(),questionTextAreaT2.getText(),2);
+	}
+	
+	@FXML
+	public void startBothTasks() throws IOException {
+		PractiseViewController ctnlr= (PractiseViewController) App.setRoomMaximized(Constants.PRACTICE_VIEW);
+		ctnlr.setQuestion(questionTextAreaT1.getText(),questionTextAreaT2.getText(),0);
 	}
 }

@@ -2,12 +2,15 @@ package learn.ieltswriting.controllers;
 
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fxmisc.richtext.InlineCssTextArea;
@@ -34,6 +37,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -66,11 +70,16 @@ public class PractiseViewController implements Controller, Initializable {
 	@FXML
 	private VBox root;
 
+	private int type;
+
 	private int elapsedTime = 0;
 
 	private int totalTime = 0;
 
 	private Timeline timeline;
+	private String question1;
+	private String question2;
+	private boolean lastQuestion = false;
 
 	private Set<Selection> selections = new HashSet<>();
 	MenuItem highlight = new MenuItem("highlight");
@@ -89,14 +98,43 @@ public class PractiseViewController implements Controller, Initializable {
 				elapsedTime += 1;
 				timeText.setText((totalTime - elapsedTime) + " minutes left");
 			} else {
-				textAreaAnswer.setEditable(false);
-				PractiseViewController.this.timeline.stop();
-				Platform.runLater(() -> {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Test ended.");
-					alert.setContentText("Your exam has ended!");
-					alert.showAndWait();
-				});
+				if (type == 1 || type == 2) {
+					textAreaAnswer.setEditable(false);
+					PractiseViewController.this.timeline.pause();
+					Platform.runLater(() -> {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Test ended.");
+						alert.setContentText("Your exam has ended!");
+						alert.showAndWait();
+						saveAnswer();
+					});
+					PractiseViewController.this.timeline.stop();
+				} else {
+					Platform.runLater(() -> {
+						if (!lastQuestion) {
+							PractiseViewController.this.timeline.pause();
+							saveAnswer();
+							lastQuestion = true;
+							totalTime = 39;
+							qTypeImgView
+									.setImage(new Image(App.class.getResource(Constants.GT2_IMAGE).toString(), true));
+							textAreaAnswer.setText("");
+							textQuestion.clear();
+							textQuestion.appendText(question2);
+							PractiseViewController.this.timeline.play();
+						} else {
+							PractiseViewController.this.timeline.pause();
+							Platform.runLater(() -> {
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("Test ended.");
+								alert.setContentText("Your exam has ended!");
+								alert.showAndWait();
+							});
+							saveAnswer();
+							PractiseViewController.this.timeline.stop();
+						}
+					});
+				}
 			}
 		}));
 		textAreaAnswer.setOnMouseClicked(mEvent -> {
@@ -261,15 +299,24 @@ public class PractiseViewController implements Controller, Initializable {
 		selection.setEnd(endIndex);
 	}
 
-	public void setQuestion(String question, int type) {
-		textQuestion.appendText(question);
+	public void setQuestion(String question1, String question2, int type) {
+		this.type = type;
+		this.question1 = question1;
+		this.question2 = question2;
 		if (type == 1) {
-			totalTime = 20;
+			textQuestion.appendText(question1);
+			totalTime = 19;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
 		if (type == 2) {
-			totalTime = 40;
+			textQuestion.appendText(question2);
+			totalTime = 39;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT2_IMAGE).toString(), true));
+		}
+		if (type == 0) {
+			textQuestion.appendText(question1);
+			totalTime = 19;
+			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
 		timeText.setText((totalTime - elapsedTime) + " minutes left");
 	}
@@ -302,4 +349,29 @@ public class PractiseViewController implements Controller, Initializable {
 		return popup;
 	}
 
+	public void saveAnswer() {
+		FileChooser fileChooser = new FileChooser();
+
+		// Set extension filter for text files
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("txt files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
+
+		// Show save file dialog
+		File file = fileChooser.showSaveDialog(root.getScene().getWindow());
+
+		if (file != null) {
+			saveTextToFile(textAreaAnswer.getText(), file);
+		}
+	}
+
+	private void saveTextToFile(String content, File file) {
+		try {
+			PrintWriter writer;
+			writer = new PrintWriter(file);
+			writer.println(content);
+			writer.close();
+		} catch (IOException ex) {
+			log.log(Level.SEVERE, null, ex);
+		}
+	}
 }

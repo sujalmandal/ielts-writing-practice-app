@@ -13,31 +13,44 @@
    <children>
       <GridPane HBox.hgrow="ALWAYS">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="140.00001220703126" minWidth="0.0" prefWidth="94.40003662109376" />
-          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="700.0" minWidth="10.0" prefWidth="590.3999267578125" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="352.0" minWidth="12.600061035156273" prefWidth="99.2000732421875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="140.00001220703126" minWidth="0.0" prefWidth="102.40001220703125" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="700.0" minWidth="10.0" prefWidth="434.99998779296874" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="352.0" minWidth="12.600061035156273" prefWidth="132.60001220703123" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="128.39999389648438" minHeight="26.000003814697266" prefHeight="102.40001831054687" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="449.99999618530273" minHeight="192.00003662109376" prefHeight="207.9999816894531" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="93.59998779296876" minHeight="30.400030517578102" prefHeight="76.79996337890623" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="128.39999389648438" minHeight="23.799998092651364" prefHeight="59.80000610351563" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="449.99999618530273" minHeight="116.39999389648436" prefHeight="116.39999389648436" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="449.99999618530273" minHeight="19.19999999999999" prefHeight="24.000018310546864" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="166.5999755859375" minHeight="30.400030517578102" prefHeight="120.19998168945312" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="93.59998779296876" minHeight="30.400030517578102" prefHeight="63.800048828125" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TextArea fx:id="questionTextArea" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextArea fx:id="questionTextAreaT1" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
               <columnConstraints>
-                <ColumnConstraints hgrow="ALWAYS" />
                 <ColumnConstraints hgrow="ALWAYS" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button mnemonicParsing="false" onAction="#startTaskOne" text="TASK 1" textFill="#1c455d" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#startTaskTwo" text="TASK 2" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+                  <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#startBothTasks" text="Start Both Tasks" GridPane.halignment="CENTER" />
                </children>
             </GridPane>
-            <Label text="WRITE THE QUESTION BELOW." textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <Label text="Task 1" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#startTaskOne" text="Start Task 1" textFill="#1c455d" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#startTaskTwo" text="Start Task 2" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <TextArea fx:id="questionTextAreaT2" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Task 2" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label text="ILETS writing practice app" textAlignment="CENTER" GridPane.columnIndex="1">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
