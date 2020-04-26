@@ -93,7 +93,7 @@ public class PractiseViewController implements Controller, Initializable {
 		setupStyledTextArea();
 		textAreaAnswer.setOnKeyPressed(event -> wordCountText
 				.setText("word count : " + WordsUtils.totalWords(textAreaAnswer.getText().trim())));
-		timeline = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
+		timeline = new Timeline(new KeyFrame(Duration.seconds(56), event -> {
 			if ((totalTime - elapsedTime) > 0) {
 				elapsedTime += 1;
 				timeText.setText((totalTime - elapsedTime + 1) + " minutes left");
