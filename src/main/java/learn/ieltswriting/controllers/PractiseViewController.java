@@ -115,7 +115,7 @@ public class PractiseViewController implements Controller, Initializable {
 							PractiseViewController.this.timeline.pause();
 							saveAnswer();
 							lastQuestion = true;
-							totalTime = 37;
+							totalTime = 39;
 							qTypeImgView
 									.setImage(new Image(App.class.getResource(Constants.GT2_IMAGE).toString(), true));
 							textAreaAnswer.setText("");
@@ -305,17 +305,17 @@ public class PractiseViewController implements Controller, Initializable {
 		this.question2 = question2;
 		if (type == 1) {
 			textQuestion.appendText(question1);
-			totalTime = 17;
+			totalTime = 19;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
 		if (type == 2) {
 			textQuestion.appendText(question2);
-			totalTime = 37;
+			totalTime = 39;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT2_IMAGE).toString(), true));
 		}
 		if (type == 0) {
 			textQuestion.appendText(question1);
-			totalTime = 17;
+			totalTime = 19;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
 		timeText.setText((totalTime - elapsedTime + 1) + " minutes left");
