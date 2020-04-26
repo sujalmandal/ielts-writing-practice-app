@@ -96,7 +96,7 @@ public class PractiseViewController implements Controller, Initializable {
 		timeline = new Timeline(new KeyFrame(Duration.minutes(1), event -> {
 			if ((totalTime - elapsedTime) > 0) {
 				elapsedTime += 1;
-				timeText.setText((totalTime - elapsedTime) + " minutes left");
+				timeText.setText((totalTime - elapsedTime + 1) + " minutes left");
 			} else {
 				if (type == 1 || type == 2) {
 					textAreaAnswer.setEditable(false);
@@ -318,7 +318,7 @@ public class PractiseViewController implements Controller, Initializable {
 			totalTime = 17;
 			qTypeImgView.setImage(new Image(App.class.getResource(Constants.GT1_IMAGE).toString(), true));
 		}
-		timeText.setText((totalTime - elapsedTime) + " minutes left");
+		timeText.setText((totalTime - elapsedTime + 1) + " minutes left");
 	}
 
 	@FXML
