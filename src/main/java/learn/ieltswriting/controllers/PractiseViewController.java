@@ -98,6 +98,7 @@ public class PractiseViewController implements Controller, Initializable {
 				elapsedTime += 1;
 				timeText.setText((totalTime - elapsedTime + 1) + " minutes left");
 			} else {
+				timeText.setText("0 minutes left");
 				if (type == 1 || type == 2) {
 					textAreaAnswer.setEditable(false);
 					PractiseViewController.this.timeline.pause();
