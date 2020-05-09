@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -86,13 +87,21 @@ public class PractiseViewController implements Controller, Initializable {
 	MenuItem clear = new MenuItem("clear");
 	MenuItem clearAll = new MenuItem("clear all");
 	MenuItem addNotes = new MenuItem("add notes");
-
+	private File tempFile;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		log.info("initialising practise view");
 		setupStyledTextArea();
-		textAreaAnswer.setOnKeyPressed(event -> wordCountText
-				.setText("word count : " + WordsUtils.totalWords(textAreaAnswer.getText().trim())));
+		try {
+			tempFile = File.createTempFile("IELTS", ".task");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		textAreaAnswer.setOnKeyPressed(event ->{
+			wordCountText.setText("word count : " + WordsUtils.totalWords(textAreaAnswer.getText().trim()));
+			saveTextToFile(textAreaAnswer.getText().trim(),tempFile);
+		});
+				
 		timeline = new Timeline(new KeyFrame(Duration.seconds(60), event -> {
 			if ((totalTime - elapsedTime) > 0) {
 				elapsedTime += 1;
@@ -367,6 +376,7 @@ public class PractiseViewController implements Controller, Initializable {
 
 	private void saveTextToFile(String content, File file) {
 		try {
+			log.log(Level.INFO,"writing file: "+file.getAbsolutePath());
 			PrintWriter writer;
 			writer = new PrintWriter(file);
 			writer.println(content);
